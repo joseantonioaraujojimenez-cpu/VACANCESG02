@@ -5,6 +5,7 @@ const URL_BASE='https://lxcayrwsipjocbprmrrw.supabase.co';
 const PUBLIC_KEY='sb_publishable_u1M8cVgkX0qW0B8JbYdwyQ_YhOYvxId';
 const NURIA_EMAIL='nuriajf27@gmail.com';
 const ALBA_EMAIL='armengol515@gmail.com';
+const SUSANA_EMAIL='susi-chico@hotmail.com';
 const TYPES={vacaciones:'Vacaciones',personal:'Asuntos personales',medico:'Visita médica',baja:'Baja médica',paternidad:'Permiso de paternidad',otro:'Otros permisos'};
 const $=id=>document.getElementById(id),escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let token='',user=null,db={employees:[],absences:[],balances:[],holidays:[],worked:[],intensive:[]},month=new Date(2026,10,1),activeTab='calendar',loading=false;
@@ -12,8 +13,9 @@ const iso=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.ge
 const toDate=s=>new Date(s+'T12:00:00');
 function isNuria(){return (user?.email||'').toLowerCase()===NURIA_EMAIL}
 function isAlba(){return (user?.email||'').toLowerCase()===ALBA_EMAIL}
-function isLimitedManager(){return isNuria()||isAlba()}
-function canEditEmployee(e){return !!e&&(!isLimitedManager()||(e._group==='G01'&&e.department===(isNuria()?'Comercial':'Flota')))}
+function isSusana(){return (user?.email||'').toLowerCase()===SUSANA_EMAIL}
+function isLimitedManager(){return isNuria()||isAlba()||isSusana()}
+function canEditEmployee(e){return !!e&&(!isLimitedManager()||(e._group==='G01'&&e.department===(isNuria()?'Comercial':isAlba()?'Flota':'Agencia')))}
 function canEditId(id){return canEditEmployee(employee(id))}
 function canAdmin(){return !isLimitedManager()}
 function groupOf(id){return employee(id)?._group||'G02'}
